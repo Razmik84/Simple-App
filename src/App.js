@@ -1,5 +1,7 @@
+
 import React, { Component } from 'react';
 import './App.css';
+import Form from "./Form"
 
 class App extends Component {
 
@@ -10,20 +12,19 @@ class App extends Component {
       userInput: [],
       tableView: "hidden"
     };
+    this.handleData = this.handleData.bind(this);
   }
 
-  addUserInput(e){
-    e.preventDefault();
-    
+  handleData(data) {
     let list = this.state.userInput;
-    if(this.refs.title.value === "" || this.refs.description.value === "") {
+    if(data.title === "" || data.description === "") {
       alert("Please Fill Both Fields");
     }else{
-      list.push({title: this.refs.title.value, description: this.refs.description.value});
+      list.push({title: data.title, description: data.description});
       this.setState({userInput: list, tableView: ""})
     }
-    this.refs.form.reset();
   }
+  
 
   deleteTableRow(index){
     let list = this.state.userInput;
@@ -41,19 +42,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to Simple-App</h1>
         </header>
 
-        <div className="myForm">
-        <form ref="form">
-            <div className="form-group">
-              <label>Title</label>
-              <input type="text" ref="title" className="form-control" placeholder="Title"/>
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <input type="text" ref="description" className="form-control" placeholder="Description"/>
-            </div>
-          <button className="btn btn-primary" onClick={this.addUserInput.bind(this)}>Submit</button>
-        </form>
-        </div>
+        <Form handlerFromParent={this.handleData}/>
 
         <div className={this.state.tableView}>
         <table className="table hidden=false">
@@ -74,7 +63,8 @@ class App extends Component {
           <td>{index}</td>
           <td>{input.title}</td>
           <td>{input.description}</td>
-          <td><button className = "btn btn-danger btn-sm" onClick= {() => {this.deleteTableRow(index)}}>Delete</button></td>
+          <td><button className = "btn btn-danger btn-sm" 
+          onClick= {() => {this.deleteTableRow(index)}}>Delete</button></td>
           </tr>
         </tbody>
       )
